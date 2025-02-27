@@ -15,6 +15,12 @@ export interface RepairAnalysis {
 
 export async function analyzeRepairImage(base64Image: string): Promise<RepairAnalysis> {
   try {
+    console.log("Starting image analysis...");
+
+    if (!base64Image) {
+      throw new Error("No image data provided");
+    }
+
     const visionResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -24,25 +30,22 @@ export async function analyzeRepairImage(base64Image: string): Promise<RepairAna
 For the repair issue shown in the image, provide comprehensive information in this format:
 
 1. Title: A clear, descriptive title for the repair issue
-2. Category: Must be one of [plumbing, electrical, furniture, appliances, walls, flooring]
-3. Description: A thorough assessment of the problem including:
-   - What the issue is
+2. Category: Must be one of [plumbing, electrical, furniture, appliances, walls, flooring, doors, outdoor]
+3. Description: A thorough assessment including:
+   - Detailed problem description
    - Potential causes
-   - Required skill level
-   - Safety considerations
-   - Tools and materials needed
-4. Steps: A detailed array of steps, where each step includes:
+   - Required skill level (beginner/intermediate/advanced)
+   - Required tools and materials with specific details
+   - Safety warnings and precautions
+   - Estimated time to complete
+   - When to call a professional instead
+4. Steps: Detailed steps including:
+   - Preparation steps (safety gear, tool setup)
    - Clear, actionable instructions
-   - Safety precautions when relevant
-   - Specific tools or materials needed for that step
-   - Common mistakes to avoid
+   - Specific measurements or specifications when needed
    - Tips for success
-
-Important:
-- Make steps detailed but concise
-- Include as many steps as needed for a complete repair
-- If the repair is too complex or dangerous, recommend professional help
-- Focus on practical, actionable instructions
+   - Common mistakes to avoid
+   - Verification steps to ensure proper repair
 
 Return response in this JSON structure:
 {
@@ -52,7 +55,7 @@ Return response in this JSON structure:
   "steps": [
     {
       "step": number,
-      "description": "string"
+      "description": "string (including all relevant details for this step)"
     }
   ]
 }`
@@ -62,7 +65,7 @@ Return response in this JSON structure:
           content: [
             {
               type: "text",
-              text: "Analyze this home repair issue and provide detailed step-by-step instructions for fixing it. Include any safety warnings and required tools."
+              text: "Analyze this home repair issue. Focus on providing detailed, step-by-step instructions that are easy to follow. Include all necessary safety precautions and required tools."
             },
             {
               type: "image_url",
@@ -76,25 +79,51 @@ Return response in this JSON structure:
       response_format: { type: "json_object" }
     });
 
-    const parsedResponse = JSON.parse(visionResponse.choices[0].message.content);
+    console.log("Received response from OpenAI");
 
-    // Validate the response structure
+    if (!visionResponse.choices[0]?.message?.content) {
+      throw new Error("Empty response from AI");
+    }
+
+    const parsedResponse = JSON.parse(visionResponse.choices[0].message.content);
+    console.log("Parsed response:", JSON.stringify(parsedResponse, null, 2));
+
+    // Validate response structure
     if (!parsedResponse.title || !parsedResponse.category || !parsedResponse.description || !Array.isArray(parsedResponse.steps)) {
       throw new Error("Invalid response format from AI");
     }
 
-    // Ensure steps are properly formatted
+    // Validate category
+    const validCategories = ["plumbing", "electrical", "furniture", "appliances", "walls", "flooring", "doors", "outdoor"];
+    if (!validCategories.includes(parsedResponse.category.toLowerCase())) {
+      console.warn(`Invalid category '${parsedResponse.category}', defaulting to 'general'`);
+      parsedResponse.category = "general";
+    }
+
+    // Ensure steps are properly formatted and numbered
     const formattedSteps = parsedResponse.steps.map((step: any, index: number) => ({
       step: index + 1,
       description: step.description || step.text || step.instruction || '',
     }));
 
-    return {
+    // Validate each step has content
+    formattedSteps.forEach((step, index) => {
+      if (!step.description || step.description.trim().length === 0) {
+        throw new Error(`Empty step description at step ${index + 1}`);
+      }
+    });
+
+    const result = {
       ...parsedResponse,
       steps: formattedSteps,
     };
 
+    console.log("Analysis completed successfully");
+    return result;
+
   } catch (error: any) {
+    console.error("Error in analyzeRepairImage:", error);
+
     if (error.code === 'insufficient_quota') {
       throw new Error("OpenAI API quota exceeded. Please try again later.");
     } else if (error.code === 'invalid_api_key') {
