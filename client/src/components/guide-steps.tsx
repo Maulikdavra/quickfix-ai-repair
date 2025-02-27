@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { Clock, Activity } from "lucide-react";
 
 interface GuideStepsProps {
   guide: Guide;
@@ -18,6 +19,22 @@ export function GuideSteps({ guide }: GuideStepsProps) {
         <CardHeader>
           <CardTitle>{guide.title}</CardTitle>
           <CardDescription>{guide.description}</CardDescription>
+          <div className="flex items-center gap-6 mt-4 text-sm">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-muted-foreground" />
+              <div>
+                <p className="font-medium">Estimated Time</p>
+                <p className="text-muted-foreground">{guide.estimatedTime}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-muted-foreground" />
+              <div>
+                <p className="font-medium">Difficulty Level</p>
+                <p className="text-muted-foreground">{guide.difficulty}</p>
+              </div>
+            </div>
+          </div>
         </CardHeader>
         {guide.imageUrl && (
           <CardContent>

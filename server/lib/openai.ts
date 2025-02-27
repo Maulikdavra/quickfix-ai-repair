@@ -7,6 +7,8 @@ export interface RepairAnalysis {
   title: string;
   category: string;
   description: string;
+  estimatedTime: string;
+  difficulty: string;
   steps: Array<{
     step: number;
     description: string;
@@ -34,12 +36,12 @@ For the repair issue shown in the image, provide comprehensive information in th
 3. Description: A thorough assessment including:
    - Detailed problem description
    - Potential causes
-   - Required skill level (beginner/intermediate/advanced)
    - Required tools and materials with specific details
    - Safety warnings and precautions
-   - Estimated time to complete
    - When to call a professional instead
-4. Steps: Detailed steps including:
+4. Estimated Time: Provide a realistic time estimate (e.g., "30 minutes", "1-2 hours")
+5. Difficulty: Rate as one of ["Beginner", "Intermediate", "Advanced"] and explain why
+6. Steps: Detailed steps including:
    - Preparation steps (safety gear, tool setup)
    - Clear, actionable instructions
    - Specific measurements or specifications when needed
@@ -52,6 +54,8 @@ Return response in this JSON structure:
   "title": "string",
   "category": "string",
   "description": "string",
+  "estimatedTime": "string",
+  "difficulty": "string",
   "steps": [
     {
       "step": number,
@@ -98,6 +102,19 @@ Return response in this JSON structure:
     if (!validCategories.includes(parsedResponse.category.toLowerCase())) {
       console.warn(`Invalid category '${parsedResponse.category}', defaulting to 'general'`);
       parsedResponse.category = "general";
+    }
+
+    // Validate difficulty
+    const validDifficulties = ["Beginner", "Intermediate", "Advanced"];
+    if (!validDifficulties.includes(parsedResponse.difficulty)) {
+      console.warn(`Invalid difficulty '${parsedResponse.difficulty}', defaulting to 'Intermediate'`);
+      parsedResponse.difficulty = "Intermediate";
+    }
+
+    // Ensure estimated time is present
+    if (!parsedResponse.estimatedTime) {
+      console.warn("No estimated time provided, setting default");
+      parsedResponse.estimatedTime = "Varies based on experience";
     }
 
     // Ensure steps are properly formatted and numbered

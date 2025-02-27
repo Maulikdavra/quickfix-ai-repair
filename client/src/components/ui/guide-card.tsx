@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { Button } from "./button";
 import { type Guide } from "@shared/schema";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Clock, Activity } from "lucide-react";
 import { Link } from "wouter";
 
 interface GuideCardProps {
@@ -32,6 +32,16 @@ export function GuideCard({ guide }: GuideCardProps) {
         <p className="text-muted-foreground mb-4 line-clamp-2">
           {guide.description}
         </p>
+        <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Clock className="w-4 h-4" />
+            <span>{guide.estimatedTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Activity className="w-4 h-4" />
+            <span>{guide.difficulty}</span>
+          </div>
+        </div>
         <Link href={`/guides/${guide.id}`}>
           <Button className="w-full">
             View Guide

@@ -8,6 +8,8 @@ export const guides = pgTable("guides", {
   category: text("category").notNull(),
   description: text("description").notNull(),
   imageUrl: text("image_url"),
+  estimatedTime: text("estimated_time").notNull(),
+  difficulty: text("difficulty").notNull(),
   steps: jsonb("steps").$type<Array<{
     step: number;
     description: string;
