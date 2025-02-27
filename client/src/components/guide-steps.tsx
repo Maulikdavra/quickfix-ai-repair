@@ -36,12 +36,14 @@ export function GuideSteps({ guide }: GuideStepsProps) {
                 <p className="text-muted-foreground">{guide.difficulty}</p>
               </div>
             </div>
-            <Link href="/shops">
-              <Button variant="outline" className="ml-auto">
-                <Store className="w-4 h-4 mr-2" />
-                Find Parts & Materials
-              </Button>
-            </Link>
+            <Button 
+              variant="outline" 
+              className="ml-auto"
+              onClick={() => window.open('/shops', '_blank')}
+            >
+              <Store className="w-4 h-4 mr-2" />
+              Find Parts
+            </Button>
           </div>
         </CardHeader>
         {guide.imageUrl && (
