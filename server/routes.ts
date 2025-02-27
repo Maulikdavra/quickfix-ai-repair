@@ -81,6 +81,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/shops", async (_req, res) => {
+    const shops = await storage.getShops();
+    res.json(shops);
+  });
+
+  app.get("/api/shops/category/:category", async (req, res) => {
+    const shops = await storage.getShopsByCategory(req.params.category);
+    res.json(shops);
+  });
+
   app.get("/api/professionals", async (_req, res) => {
     const professionals = await storage.getProfessionals();
     res.json(professionals);

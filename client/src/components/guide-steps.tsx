@@ -6,7 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Clock, Activity } from "lucide-react";
+import { Button } from "./ui/button";
+import { Clock, Activity, Store } from "lucide-react";
+import { Link } from "wouter";
 
 interface GuideStepsProps {
   guide: Guide;
@@ -34,6 +36,12 @@ export function GuideSteps({ guide }: GuideStepsProps) {
                 <p className="text-muted-foreground">{guide.difficulty}</p>
               </div>
             </div>
+            <Link href="/shops">
+              <Button variant="outline" className="ml-auto">
+                <Store className="w-4 h-4 mr-2" />
+                Find Parts & Materials
+              </Button>
+            </Link>
           </div>
         </CardHeader>
         {guide.imageUrl && (

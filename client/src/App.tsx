@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Guides from "@/pages/guides";
 import GuidePage from "@/pages/guide";
 import Professionals from "@/pages/professionals";
+import Shops from "@/pages/shops";
 
 function Router() {
   return (
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/guides" component={Guides} />
       <Route path="/guides/:id" component={GuidePage} />
       <Route path="/professionals" component={Professionals} />
+      <Route path="/shops" component={Shops} />
       <Route component={NotFound} />
     </Switch>
   );
