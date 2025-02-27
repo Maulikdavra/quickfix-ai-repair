@@ -3,10 +3,19 @@ import { useLocation } from "wouter";
 import { GuideCard } from "@/components/ui/guide-card";
 import { RepairCategories } from "@/components/repair-categories";
 import { type Guide } from "@shared/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 export default function Guides() {
   const [location, setLocation] = useLocation();
   const category = new URLSearchParams(location.split("?")[1]).get("category");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest">("newest");
 
   const { data: guides, isLoading } = useQuery<Guide[]>({
     queryKey: category
@@ -14,10 +23,28 @@ export default function Guides() {
       : ["/api/guides"],
   });
 
+  const sortedGuides = guides?.sort((a, b) => {
+    if (sortBy === "newest") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+
   return (
     <div className="container py-8 space-y-8">
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Repair Guides</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Repair Guides</h1>
+          <Select value={sortBy} onValueChange={(value) => setSortBy(value as "newest" | "oldest")}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest First</SelectItem>
+              <SelectItem value="oldest">Oldest First</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <RepairCategories
           selectedCategory={category || undefined}
           onSelectCategory={(newCategory) => {
@@ -37,7 +64,7 @@ export default function Guides() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {guides?.map((guide) => (
+          {sortedGuides?.map((guide) => (
             <GuideCard key={guide.id} guide={guide} />
           ))}
           {guides?.length === 0 && (

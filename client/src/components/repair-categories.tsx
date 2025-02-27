@@ -12,21 +12,26 @@ export function RepairCategories({
   onSelectCategory,
 }: RepairCategoriesProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {REPAIR_CATEGORIES.map((category) => (
         <Card
           key={category.id}
           className={cn(
-            "cursor-pointer transition-colors hover:bg-primary/5",
-            selectedCategory === category.id && "border-primary bg-primary/10"
+            "cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg",
+            selectedCategory === category.id && "border-primary bg-primary/5"
           )}
           onClick={() => onSelectCategory(category.id)}
         >
-          <CardContent className="flex flex-col items-center justify-center p-6">
-            <span className="text-4xl mb-2">{category.icon}</span>
-            <span className="text-sm font-medium text-center">
-              {category.name}
-            </span>
+          <CardContent className="p-6">
+            <div className="flex items-start space-x-4">
+              <span className="text-4xl">{category.icon}</span>
+              <div className="space-y-1">
+                <h3 className="font-medium">{category.name}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {category.description}
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       ))}

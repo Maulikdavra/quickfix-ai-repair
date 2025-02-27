@@ -45,10 +45,12 @@ export function compressImage(file: File): Promise<string> {
 }
 
 export const REPAIR_CATEGORIES = [
-  { id: "plumbing", name: "Plumbing", icon: "🚰" },
-  { id: "electrical", name: "Electrical", icon: "⚡" },
-  { id: "furniture", name: "Furniture", icon: "🪑" },
-  { id: "appliances", name: "Appliances", icon: "🔧" },
-  { id: "walls", name: "Walls & Painting", icon: "🎨" },
-  { id: "flooring", name: "Flooring", icon: "🏠" },
+  { id: "plumbing", name: "Plumbing", icon: "🚰", description: "Leaks, clogs, faucets, and pipes" },
+  { id: "electrical", name: "Electrical", icon: "⚡", description: "Outlets, switches, lighting" },
+  { id: "furniture", name: "Furniture", icon: "🪑", description: "Assembly, repairs, and maintenance" },
+  { id: "appliances", name: "Appliances", icon: "🔧", description: "Kitchen and laundry appliances" },
+  { id: "walls", name: "Walls & Painting", icon: "🎨", description: "Patching, painting, and decoration" },
+  { id: "flooring", name: "Flooring", icon: "🏠", description: "Tile, wood, and carpet repairs" },
+  { id: "doors", name: "Doors & Windows", icon: "🚪", description: "Hinges, locks, and weatherstripping" },
+  { id: "outdoor", name: "Outdoor", icon: "🌳", description: "Deck, fence, and garden repairs" }
 ];
