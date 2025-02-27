@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { compressImage } from "@/lib/utils";
 import { apiRequest } from "@/lib/queryClient";
 import { type Guide } from "@shared/schema";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>();
@@ -16,16 +17,28 @@ export default function Home() {
 
   const analyzeMutation = useMutation({
     mutationFn: async (file: File) => {
-      const compressedImage = await compressImage(file);
-      const res = await apiRequest("POST", "/api/guides/analyze", {
-        image: compressedImage,
-      });
-      return res.json() as Promise<Guide>;
+      try {
+        const compressedImage = await compressImage(file);
+        const res = await apiRequest("POST", "/api/guides/analyze", {
+          image: compressedImage,
+        });
+        return res.json() as Promise<Guide>;
+      } catch (error: any) {
+        // Enhanced error handling
+        if (error.message.includes('too large')) {
+          throw new Error("Image size is too large. Please use a smaller image (max 10MB).");
+        }
+        throw error;
+      }
     },
     onSuccess: (guide) => {
+      toast({
+        title: "Analysis Complete",
+        description: "Your repair guide has been generated!",
+      });
       setLocation(`/guides/${guide.id}`);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         variant: "destructive",
         title: "Error analyzing image",
@@ -49,12 +62,19 @@ export default function Home() {
           <h2 className="text-2xl font-semibold">Upload a Photo</h2>
           <FileUpload
             onFileSelect={(file) => analyzeMutation.mutate(file)}
-            className="h-[300px]"
+            className={analyzeMutation.isPending ? "opacity-50 pointer-events-none" : "h-[300px]"}
           />
           {analyzeMutation.isPending && (
-            <p className="text-center text-muted-foreground">
-              Analyzing your image...
-            </p>
+            <div className="text-center space-y-2">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto" />
+              <p className="text-muted-foreground">
+                Analyzing your image...
+                <br />
+                <span className="text-sm">
+                  Our AI is examining the repair issue and generating step-by-step instructions
+                </span>
+              </p>
+            </div>
           )}
         </div>
 
