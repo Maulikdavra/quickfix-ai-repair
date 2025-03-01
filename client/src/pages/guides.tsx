@@ -10,6 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
+import { Link } from "wouter";
 import { useState } from "react";
 
 export default function Guides() {
@@ -34,7 +37,15 @@ export default function Guides() {
     <div className="container py-8 space-y-8">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Repair Guides</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-3xl font-bold">Repair Guides</h1>
+            <Link href="/">
+              <Button variant="ghost">
+                <Home className="w-4 h-4 mr-2" />
+                Home
+              </Button>
+            </Link>
+          </div>
           <Select value={sortBy} onValueChange={(value) => setSortBy(value as "newest" | "oldest")}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sort by..." />
