@@ -58,7 +58,7 @@ export default function Home() {
 
       <div className="grid md:grid-cols-2 gap-12">
         <div className="space-y-6">
-          <h2 className="section-title">Upload a Photo</h2>
+          <h2 className="section-title bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">Upload a Photo</h2>
           <FileUpload
             onFileSelect={(file) => analyzeMutation.mutate(file)}
             className={analyzeMutation.isPending ? "opacity-50 pointer-events-none" : "h-[300px] card-gradient"}

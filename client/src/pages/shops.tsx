@@ -15,7 +15,7 @@ export default function Shops() {
   return (
     <div className="container py-8 space-y-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" onClick={() => setLocation("/")}>
+        <Button variant="outline" onClick={() => setLocation(-1)}>
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
         </Button>

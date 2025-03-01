@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RepairCategories } from "@/components/repair-categories";
-import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import { Star, Home } from "lucide-react";
 import { type Professional } from "@shared/schema";
 import { useState } from "react";
 
@@ -16,15 +17,16 @@ export default function Professionals() {
 
   return (
     <div className="container py-8 space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Find a Professional</h1>
-        <p className="text-muted-foreground">
-          Browse our network of verified professionals by category
-        </p>
-        <RepairCategories
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-bold">Find a Professional</h1>
+          <Link href="/">
+            <Button variant="ghost">
+              <Home className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {isLoading ? (
