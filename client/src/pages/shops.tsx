@@ -6,7 +6,8 @@ import { type Shop } from "@shared/schema";
 import { useLocation } from "wouter";
 
 export default function Shops() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  const fromGuideId = new URLSearchParams(location.split("?")[1]).get("from");
 
   const { data: shops, isLoading } = useQuery<Shop[]>({
     queryKey: ["/api/shops"],
@@ -15,7 +16,10 @@ export default function Shops() {
   return (
     <div className="container py-8 space-y-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" onClick={() => setLocation(-1)}>
+        <Button 
+          variant="outline" 
+          onClick={() => setLocation(fromGuideId ? `/guides/${fromGuideId}` : "/guides")}
+        >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
         </Button>
