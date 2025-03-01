@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { GuideCard } from "@/components/ui/guide-card";
-import { RepairCategories } from "@/components/repair-categories";
 import { type Guide } from "@shared/schema";
 import {
   Select,
@@ -35,33 +34,25 @@ export default function Guides() {
 
   return (
     <div className="container py-8 space-y-8">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold">Repair Guides</h1>
-            <Link href="/">
-              <Button variant="ghost">
-                <Home className="w-4 h-4 mr-2" />
-                Home
-              </Button>
-            </Link>
-          </div>
-          <Select value={sortBy} onValueChange={(value) => setSortBy(value as "newest" | "oldest")}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="oldest">Oldest First</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h1 className="page-title">Repair Guides</h1>
+          <Link href="/">
+            <Button variant="ghost">
+              <Home className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+          </Link>
         </div>
-        <RepairCategories
-          selectedCategory={category || undefined}
-          onSelectCategory={(newCategory) => {
-            setLocation(`/guides${newCategory ? `?category=${newCategory}` : ""}`);
-          }}
-        />
+        <Select value={sortBy} onValueChange={(value) => setSortBy(value as "newest" | "oldest")}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort by..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest First</SelectItem>
+            <SelectItem value="oldest">Oldest First</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {isLoading ? (
