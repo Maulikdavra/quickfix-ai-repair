@@ -24,7 +24,6 @@ export default function Home() {
         });
         return res.json() as Promise<Guide>;
       } catch (error: any) {
-        // Enhanced error handling
         if (error.message.includes('too large')) {
           throw new Error("Image size is too large. Please use a smaller image (max 10MB).");
         }
@@ -48,25 +47,25 @@ export default function Home() {
   });
 
   return (
-    <div className="container py-8 space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">QuickFix AI Home Repair Assistant</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+    <div className="container py-12 space-y-12">
+      <div className="text-center space-y-6">
+        <h1 className="page-title">QuickFix AI Home Repair Assistant</h1>
+        <p className="subtitle max-w-2xl mx-auto">
           Upload a photo of your repair issue and get instant AI-powered guidance,
           or browse our repair categories.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Upload a Photo</h2>
+      <div className="grid md:grid-cols-2 gap-12">
+        <div className="space-y-6">
+          <h2 className="section-title">Upload a Photo</h2>
           <FileUpload
             onFileSelect={(file) => analyzeMutation.mutate(file)}
-            className={analyzeMutation.isPending ? "opacity-50 pointer-events-none" : "h-[300px]"}
+            className={analyzeMutation.isPending ? "opacity-50 pointer-events-none" : "h-[300px] card-gradient"}
           />
           {analyzeMutation.isPending && (
             <div className="text-center space-y-2">
-              <Loader2 className="w-8 h-8 animate-spin mx-auto" />
+              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
               <p className="text-muted-foreground">
                 Analyzing your image...
                 <br />
@@ -78,8 +77,8 @@ export default function Home() {
           )}
         </div>
 
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Browse Categories</h2>
+        <div className="space-y-6">
+          <h2 className="section-title">Browse Categories</h2>
           <RepairCategories
             selectedCategory={selectedCategory}
             onSelectCategory={(category) => {
@@ -94,6 +93,7 @@ export default function Home() {
         <Button
           variant="outline"
           size="lg"
+          className="card-gradient"
           onClick={() => setLocation("/professionals")}
         >
           Find a Professional

@@ -8,6 +8,24 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-gradient-to-b from-background to-background/95 min-h-screen text-foreground;
+  }
+}
+
+@layer components {
+  .page-title {
+    @apply text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80;
+  }
+
+  .section-title {
+    @apply text-3xl font-bold text-foreground/90;
+  }
+
+  .card-gradient {
+    @apply hover:bg-gradient-to-tr hover:from-primary/5 hover:to-transparent transition-colors duration-300;
+  }
+
+  .subtitle {
+    @apply text-xl text-muted-foreground;
   }
 }

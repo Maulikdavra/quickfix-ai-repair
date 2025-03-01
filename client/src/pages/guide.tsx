@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "wouter";
 import { GuideSteps } from "@/components/guide-steps";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Home } from "lucide-react";
 import { Link } from "wouter";
 import { type Guide } from "@shared/schema";
 
@@ -41,12 +41,20 @@ export default function GuidePage() {
 
   return (
     <div className="container py-8 space-y-4">
-      <Link href="/guides">
-        <Button variant="outline">
-          <ChevronLeft className="w-4 h-4 mr-2" />
-          Back to Guides
-        </Button>
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link href="/guides">
+          <Button variant="outline">
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            Back to Guides
+          </Button>
+        </Link>
+        <Link href="/">
+          <Button variant="ghost">
+            <Home className="w-4 h-4 mr-2" />
+            Home
+          </Button>
+        </Link>
+      </div>
       <GuideSteps guide={guide} />
     </div>
   );
