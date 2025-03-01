@@ -1,31 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RepairCategories } from "@/components/repair-categories";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ChevronLeft } from "lucide-react";
 import { type Shop } from "@shared/schema";
-import { useState } from "react";
+import { useLocation } from "wouter";
 
 export default function Shops() {
-  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [, setLocation] = useLocation();
 
   const { data: shops, isLoading } = useQuery<Shop[]>({
-    queryKey: selectedCategory
-      ? [`/api/shops/category/${selectedCategory}`]
-      : ["/api/shops"],
+    queryKey: ["/api/shops"],
   });
 
   return (
     <div className="container py-8 space-y-8">
-      <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <Button variant="outline" onClick={() => setLocation("/")}>
+          <ChevronLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
         <h1 className="text-3xl font-bold">Hardware Stores</h1>
-        <p className="text-muted-foreground">
-          Find the parts and materials you need at these local hardware stores
-        </p>
-        <RepairCategories
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
       </div>
 
       {isLoading ? (
@@ -51,16 +45,6 @@ export default function Shops() {
                 <p className="text-muted-foreground">
                   {shop.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {shop.specialties.map((specialty) => (
-                    <span
-                      key={specialty}
-                      className="text-sm px-2 py-1 bg-primary/10 rounded-full"
-                    >
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
                 {shop.locations.map((location, index) => (
                   <div key={index} className="text-sm space-y-1">
                     <p>{location.address}</p>
@@ -73,7 +57,7 @@ export default function Shops() {
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => window.open(shop.website, '_blank')}
+                    onClick={() => shop.website && window.open(shop.website, '_blank')}
                   >
                     Visit Website
                     <ExternalLink className="w-4 h-4 ml-2" />
