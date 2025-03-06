@@ -2,7 +2,7 @@
 
 An intelligent web application that assists homeowners with DIY repairs using advanced AI image analysis and dynamic, personalized repair guides.
 
-![QuickFix AI Screenshot](./attached_assets/Screenshot%202025-02-28%20at%207.42.59%20PM.png)
+[Live Demo](https://ai-handy-helper-maulikdavra06.replit.app/)
 
 ## Features
 
